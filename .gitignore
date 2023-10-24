@@ -1,0 +1,9 @@
+# General:
+.idea/
+src/__pycache__/
+/src/.env
+
+# Mac stuff:
+.DS_Store
+.AppleDouble
+.LSOverride
