@@ -6,6 +6,9 @@ class Vernam:
     key = ""
     alphabet_size = 26
 
+    def set_key(self, key):
+        self.key = key
+
     def transform(self, message, mode):
         """
         mode = 1 -- encrypt
@@ -28,6 +31,8 @@ class Vernam:
                 if mode == 1:
                     modified_position = (ord(letter) + ord(self.key[count])) % self.alphabet_size
                 elif mode == 2:
+                    if len(self.key) == 0:
+                        raise Exception("First you need to set key")
                     modified_position = (ord(letter) - ord(self.key[count])) % self.alphabet_size
                 else:
                     raise ValueError(f"Incorrect {mode=}, should be 1 or 2")
@@ -39,4 +44,7 @@ class Vernam:
 
                 count += 1
 
-        return output
+        if mode == 1:
+            return output, self.key
+        elif mode == 2:
+            return output
