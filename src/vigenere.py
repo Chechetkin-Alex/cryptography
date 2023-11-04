@@ -28,7 +28,7 @@ class Vigenere:
                     modified_position = (ord(letter) + ord(self.key[count])) % self.alphabet_size
                 elif mode == 2:
                     modified_position = (ord(letter) - ord(
-                        self.key[count]) + self.alphabet_size) % self.alphabet_size
+                        self.key[count])) % self.alphabet_size
                 else:
                     raise ValueError(f"Incorrect {mode=}, should be 1 or 2")
 
