@@ -1,5 +1,5 @@
 import os.path
-from caesar import Caesar
+from caesar import Caesar, hack_cipher
 from vigenere import Vigenere
 from vernam import Vernam
 
@@ -12,10 +12,14 @@ def start():
           "посмотреть на мои режимы работы:")
 
     ans = input().split()
-    if all(os.path.isfile(path) for path in ans):
-        print("Отлично, теперь ты можешь выбрать метод шифрования.")
-    else:
-        raise FileNotFoundError
+    for path in ans:
+        if os.path.isfile(path):
+            ans.append(os.path.abspath(path))
+            ans.remove(path)
+        else:
+            raise FileNotFoundError
+
+    print("\nОтлично, теперь ты можешь выбрать метод шифрования.")
 
     cipher = input("1: Шифр Цезаря\n"
                    "2: Шифр Виженера\n"
@@ -73,7 +77,7 @@ def encrypt(ans, cipher):
             for path in ans:
                 with open(path, "r") as original, \
                         open(f"{os.path.splitext(path)[0]}_encrypted", "w") as encrypted, \
-                        open(f"{os.path.dirname(path)}/key_for_file_{os.path.basename}.txt", "w") as key_file:
+                        open(f"{os.path.dirname(path)}/key_for_file_{os.path.basename(path)}.txt", "w") as key_file:
                     encrypted_message = Vernam().transform(original.read(), 1)
                     encrypted.write(encrypted_message[0])
                     key_file.write(encrypted_message[1])
@@ -106,6 +110,27 @@ def encrypt(ans, cipher):
 
 
 def decrypt(ans, cipher):
+    if cipher == 1:
+        hack = input("Хочешь я попробую отгадать сдвиг в шифре Цезаря?\n"
+                     "1: Да, погнали\n"
+                     "2: Нет, хочу просто расшифровать текст: ")
+        if hack.isnumeric() and 1 <= int(hack) <= 2:
+            hack = int(hack)
+        else:
+            raise ValueError("Expected number")
+
+        if hack == 1:
+            if len(ans) != 0:
+                for path in ans:
+                    with open(path, "r") as original:
+                        print(f"\nАкинатор считает, что ответ... "
+                              f"{hack_cipher(original.read())}. Ну, я почти в этом уверен)")
+            else:
+                message = input("\nВведи фразу, которую хочешь расшифровать: ")
+                print(f"\nАкинатор считает, что ответ... "
+                      f"{hack_cipher(message)}. Ну, я почти в этом уверен)")
+            return
+
     if len(ans) != 0:
         if cipher == 1:
             shift = input("\nВведи ключ для файлов (число): ")

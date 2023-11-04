@@ -1,5 +1,5 @@
 import unittest
-from src.caesar import Caesar
+from src.caesar import Caesar, hack_cipher
 
 
 class TestCaesar(unittest.TestCase):
@@ -37,6 +37,16 @@ class TestCaesar(unittest.TestCase):
         message = "Hello there"
         with self.assertRaises(ValueError):
             cipher.transform(message, 3)
+
+    def test_hack_cipher(self):
+        message = "Sherlock Holmes.\nFictional detective.\nConsulting detective, Victorian England.\n" \
+                  "Keen intellect, observation, deduction, forensic science\nAssisted by Dr. John Watson.\n" \
+                  "Solves challenging cases.\nPopular, enduring fictional character.\nAdapted for films, " \
+                  "television shows, and other media.\nComplex, flawed character, unique quirks and eccentricities"
+        for shift in range(27):
+            cipher = Caesar(shift)
+            encrypted_message = cipher.transform(message, 1)
+            self.assertEqual(hack_cipher(encrypted_message), cipher.shift)
 
 
 if __name__ == "__main__":

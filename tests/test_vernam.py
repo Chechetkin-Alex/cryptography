@@ -8,7 +8,7 @@ class TestCaesar(unittest.TestCase):
         cipher = Vernam()
         message = "Hello there"
         encrypted_message = cipher.transform(message, 1)
-        result = cipher.transform(encrypted_message, 2)
+        result = cipher.transform(encrypted_message[0], 2)
         self.assertEqual(message, result)
 
     def test_raises_ValueError(self):

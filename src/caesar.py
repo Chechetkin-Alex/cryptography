@@ -36,3 +36,17 @@ class Caesar:
                 output += new_letter
 
         return output
+
+
+def hack_cipher(message):
+    letter_frequency = dict()
+    message = message.upper()
+    for letter in message:
+        if letter in string.ascii_uppercase:
+            if letter in letter_frequency:
+                letter_frequency[letter] += 1
+            else:
+                letter_frequency[letter] = 1
+
+    # "E" is the most popular letter in English texts
+    return (ord(max(letter_frequency, key=letter_frequency.get)) - ord("E")) % 26
